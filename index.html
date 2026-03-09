@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>8 Puzzle – Home</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Playfair+Display:wght@900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Nunito', sans-serif;
+      background: #f8f4ff;
+      background-image:
+        radial-gradient(ellipse at 15% 15%, #fde8f0 0%, transparent 50%),
+        radial-gradient(ellipse at 85% 85%, #dff6ff 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 50%, #eae8fd 0%, transparent 70%);
+      padding: 24px;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.85);
+      border-radius: 30px;
+      border: 2px solid rgba(255,255,255,0.95);
+      box-shadow: 0 24px 64px rgba(160,120,210,0.18), 0 4px 16px rgba(0,0,0,0.07);
+      padding: 38px 38px 32px;
+      text-align: center;
+      width: 360px;
+      max-width: 95vw;
+    }
+
+    .big-emoji {
+      font-size: 60px;
+      display: block;
+      margin-bottom: 8px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .game-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 38px;
+      font-weight: 900;
+      color: #6d3fc8;
+      letter-spacing: -1px;
+      margin-bottom: 8px;
+    }
+
+    .game-subtitle {
+      color: #9d8ec4;
+      font-size: 14px;
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .section-label {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: #c4b5fd;
+      margin-bottom: 10px;
+    }
+
+    /* ── THE GRID ── */
+    .puzzle-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 80px);
+      grid-template-rows: repeat(3, 80px);
+      gap: 8px;
+      justify-content: center;
+      margin: 0 auto 22px;
+    }
+
+    .tile {
+      width: 80px;
+      height: 80px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      font-weight: 900;
+      color: #3a2b6b;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.10), inset 0 1px 0 rgba(255,255,255,0.6);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .tile::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 40%;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.45), transparent);
+      border-radius: 16px 16px 0 0;
+      pointer-events: none;
+    }
+
+    .tile.blank {
+      background: transparent !important;
+      border: 2.5px dashed #ddd6fe;
+      box-shadow: none;
+    }
+    .tile.blank::after { display: none; }
+
+    /* tile colors */
+    .t1 { background: #ffb3c1; }
+    .t2 { background: #ffd6a5; }
+    .t3 { background: #fdffb6; }
+    .t4 { background: #caffbf; }
+    .t5 { background: #9bf6ff; }
+    .t6 { background: #bdb2ff; }
+    .t7 { background: #ffc6ff; }
+    .t8 { background: #a0c4ff; }
+
+    /* ── Button ── */
+    .btn-play {
+      display: inline-block;
+      background: linear-gradient(135deg, #a78bfa, #f472b6);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 50px;
+      padding: 14px 44px;
+      font-size: 17px;
+      font-weight: 800;
+      font-family: 'Nunito', sans-serif;
+      box-shadow: 0 8px 24px rgba(167,139,250,0.45);
+      transition: transform 0.18s, box-shadow 0.18s;
+      margin-bottom: 20px;
+      display: block;
+      width: fit-content;
+      margin: 0 auto 20px;
+    }
+    .btn-play:hover {
+      transform: scale(1.06) translateY(-2px);
+      box-shadow: 0 12px 30px rgba(167,139,250,0.55);
+    }
+
+    /* ── Highscore banner ── */
+    .highscore-banner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      background: linear-gradient(135deg, #fff9e6, #ffedf5);
+      border: 1.5px solid #fde68a;
+      border-radius: 20px;
+      padding: 12px 20px;
+      margin-bottom: 18px;
+    }
+
+    .hs-block { text-align: center; }
+
+    .hs-icon { font-size: 20px; display: block; margin-bottom: 2px; }
+
+    .hs-val {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      font-weight: 900;
+      color: #b45309;
+      line-height: 1;
+    }
+
+    .hs-lbl {
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      color: #d97706;
+      margin-top: 2px;
+    }
+
+    .hs-sep {
+      width: 1px; height: 38px;
+      background: linear-gradient(to bottom, transparent, #fcd34d, transparent);
+    }
+
+    .hs-none {
+      font-size: 13px;
+      color: #d97706;
+      font-weight: 700;
+      font-style: italic;
+    }
+
+    /* ── Instructions ── */
+    .instr-list { display: flex; flex-direction: column; gap: 7px; }
+    .instr-row {
+      background: rgba(196,181,253,0.13);
+      border-radius: 20px;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #9d84c0;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-10px); }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <span class="big-emoji">🧩</span>
+    <h1 class="game-title">8 Puzzle</h1>
+    <p class="game-subtitle">Slide the tiles into the correct order.<br>Challenge your mind!</p>
+
+    <p class="section-label">Goal State</p>
+    <div class="puzzle-grid">
+      <div class="tile t1">1</div>
+      <div class="tile t2">2</div>
+      <div class="tile t3">3</div>
+      <div class="tile t4">4</div>
+      <div class="tile t5">5</div>
+      <div class="tile t6">6</div>
+      <div class="tile t7">7</div>
+      <div class="tile t8">8</div>
+      <div class="tile blank"></div>
+    </div>
+
+    <a href="play.html" class="btn-play">▶ Play Now</a>
+
+    <div class="highscore-banner">
+      <div class="hs-none" id="hs-none">🎮 No highscore yet — be the first!</div>
+      <div id="hs-data" style="display:none;width:100%;align-items:center;justify-content:center;gap:18px;">
+        <div class="hs-block">
+          <span class="hs-icon">⚡</span>
+          <div class="hs-val" id="hs-moves">—</div>
+          <div class="hs-lbl">Best Moves</div>
+        </div>
+        <div class="hs-sep"></div>
+        <div class="hs-block">
+          <span class="hs-icon">🕐</span>
+          <div class="hs-val" id="hs-time">—</div>
+          <div class="hs-lbl">Best Time</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="instr-list">
+      <div class="instr-row">🎯 Tap a tile next to the blank to move it</div>
+      <div class="instr-row">⏱ Race against the clock</div>
+      <div class="instr-row">🏆 Fewer moves = better score</div>
+    </div>
+  </div>
+
+  <script>
+    const hsMoves = localStorage.getItem('hs_moves');
+    const hsTime  = localStorage.getItem('hs_time');
+    if (hsMoves && hsTime) {
+      document.getElementById('hs-none').style.display = 'none';
+      const d = document.getElementById('hs-data');
+      d.style.display = 'flex';
+      document.getElementById('hs-moves').textContent = hsMoves;
+      document.getElementById('hs-time').textContent  = hsTime;
+    }
+  </script>
+</body>
+</html>
