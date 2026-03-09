@@ -257,5 +257,5 @@ MIT — free to use, modify, and distribute.
 ---
 
 <div align="center">
-  Made with 🧩 and pastel colours
+  Made by Iditri Datta
 </div>
