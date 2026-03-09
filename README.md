@@ -256,6 +256,17 @@ MIT — free to use, modify, and distribute.
 
 ---
 
+<h2>🔥 Contribute</h2>
+
+Open to collaborations! Help us improve:
+
+AI-based disaster prediction models
+
+Multilingual support (Hindi + regional languages)
+
+Offline functionality for low-connectivity areas
+
+
 <div align="center">
   Made by Iditri Datta
 </div>
