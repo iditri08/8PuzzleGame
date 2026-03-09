@@ -260,11 +260,11 @@ MIT — free to use, modify, and distribute.
 
 Open to collaborations! Help us improve:
 
-AI-based disaster prediction models
+AI-based hint system
 
 Multilingual support (Hindi + regional languages)
 
-Offline functionality for low-connectivity areas
+Feel free to collaborate!!
 
 
 <div align="center">
